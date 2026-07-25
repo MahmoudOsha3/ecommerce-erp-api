@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Dashboard\Authentication\{ResetPasswordController , LoginController , LogoutController , RegisterController ,ForgetPasswordController};
+use App\Http\Controllers\Dashboard\Category\CategoryController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1/admin')->group(function(){
@@ -14,6 +15,20 @@ Route::prefix('v1/admin')->group(function(){
     Route::post('logout' , [LogoutController::class , 'logout'])->middleware('auth:admin-api') ;
 
 
+    Route::middleware('auth:admin-api')->group(function(){
+
+        Route::apiResource('categories' , CategoryController::class);
+
+
+
+
+
+
+
+
+
+
+    });
 
 
 });
