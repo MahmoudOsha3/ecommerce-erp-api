@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 class Admin extends Authenticatable implements JWTSubject
 {
-    use HasFactory;
+    use HasFactory , Notifiable;
 
     protected $fillable = [
         'name' , 'email' , 'password' , 'phone'
@@ -19,7 +20,7 @@ class Admin extends Authenticatable implements JWTSubject
         'password' ,
         'remember_token'
     ] ;
-    
+
     protected $casts = [
         'password' => 'hashed' ,
         'email_verified_at' => 'datetime',
