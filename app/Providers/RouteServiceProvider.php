@@ -44,5 +44,17 @@ class RouteServiceProvider extends ServiceProvider
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
+
+        RateLimiter::for('admin-login' , function(Request $request){
+            $key = strtolower(trim($request->login)) . '|' . $request->ip();
+            Limit::perMinutes(5 , 5)->by($key)->response(function (Request $request, array $headers) {
+                $seconds = $headers['Retry-After'] ?? 0;
+                $time = $seconds >= 60 ? ceil($seconds / 60) . ' دقيقة' : $seconds . ' ثانية';
+                    return response()->json([
+                        'success' => false,
+                        'message' => "تم حظر الدخول لتجاوز الحد المسموح بعدد المحاولات الممكنه يمكنك المحاولة بعد {$time}"
+                    ], 429, $headers);
+                });
+        });
     }
 }
