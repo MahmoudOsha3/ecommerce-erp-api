@@ -1,19 +1,21 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Dashboard\Authentication\{ResetPasswordController , LoginController , LogoutController , RegisterController ,ForgetPasswordController};
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
+Route::prefix('v1/admin')->group(function(){
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+    // Authentication
+    Route::post('register' , [RegisterController::class , 'register']) ;
+    Route::post('login' , [LoginController::class , 'login'])->middleware('throttle:admin-login') ;
+    Route::post('forget-password' , [ForgetPasswordController::class , 'sendOtp']) ;
+    Route::post('forget-password/verify-otp' , [ForgetPasswordController::class , 'verifyOtp']) ;
+    Route::post('reset-password' , [ResetPasswordController::class , 'reset']) ;
+    Route::post('logout' , [LogoutController::class , 'logout'])->middleware('auth:admin-api') ;
+
+
+
+
 });
+
+
